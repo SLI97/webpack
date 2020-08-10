@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<div class="qwe"> haha</div>
 		<router-view/>
 	</div>
 </template>
@@ -13,9 +12,3 @@
 		},
 	};
 </script>
-
-<style >
-	.qwe {
-		color: blue;
-	}
-</style>
