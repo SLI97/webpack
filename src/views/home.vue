@@ -1,5 +1,8 @@
 <template>
-	<div>{{msg}}</div>
+	<div class="haha">{{msg}}
+		<span class="zzz">12312321</span>
+		<img src="../assets/images/aaa.png" style="width:100px;height:100px;">
+	</div>
 </template>
 <script>
 	export default {
@@ -13,5 +16,21 @@
 		}
 	};
 </script>
-<style lang='less'>
+
+
+<style scoped lang="stylus">
+	.container
+		color:red
+		background: yellowgreen
+	
 </style>
+
+
+<!--<style>-->
+	<!--span{-->
+		<!--color:red;-->
+		<!--font-size: 50px;-->
+		<!--background: yellowgreen;-->
+	<!--}-->
+
+<!--</style>-->
