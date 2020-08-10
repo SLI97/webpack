@@ -1,5 +1,5 @@
 <template>
-  <div>{{msg}}</div>
+	<router-view />
 </template>
 <script>
 export default {

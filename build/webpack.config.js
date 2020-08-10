@@ -23,7 +23,10 @@ module.exports = {
         port: 4001,
         hot: true,
         open: false,
-        stats: 'errors-only',   //不在控制台输出没用的信息
+        stats: 'errors-only',   //不在Terminal输出没用的信息
+	      proxy:{   //开启反向代理，请求的时候直接写/api开头即可
+		      '/api': 'http://localhost:3000'
+	      }
     },
     module: {
         rules: [{
@@ -46,7 +49,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.esm.js',
+	        '@': path.resolve(__dirname, '../src'),
         },
         extensions: ['*', '.js', '.vue', '.json']
     },
