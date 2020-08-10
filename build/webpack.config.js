@@ -8,6 +8,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const {CleanWebpackPlugin} = require("clean-webpack-plugin")
 const ExtractTextPlugin = require("extract-text-webpack-plugin")  //webpack3 css提取
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')   //webpack4 css提取
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//压缩css插件
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -40,22 +41,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.vue$/, loader: 'vue-loader',
-        options: {
-          loaders: {
-            css: ExtractTextPlugin.extract({
-              use: 'css-loader',
-              fallback: 'style-loader',
-              publicPath: "./",
-              filename: path.join('static', 'css/[name].[contenthash].css')
-            }),
-            // stylus: ExtractTextPlugin.extract({
-            //   fallback: 'style-loader',
-            //   use: ['css-loader', 'stylus-loader'],
-            //   publicPath: "./"
-            // }),
-          }
-        }
+        test: /\.vue$/, loader: 'vue-loader'
       },
       {test: /\.js$/, loader: 'babel-loader', exclude: path.resolve(__dirname, '../node_modules/')},
       {
@@ -66,7 +52,13 @@ module.exports = {
               MiniCssExtractPlugin.loader
           , 'css-loader']
       },
-      {test: /\.styl(us)?$/, use: ['style-loader', 'css-loader', 'stylus-loader']},
+      {
+        test: /\.styl(us)?$/, use: [
+            process.env.NODE_ENV !== 'production'
+            ? 'style-loader' :
+            MiniCssExtractPlugin.loader
+          , 'css-loader', 'stylus-loader']
+      },
       {test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
       {test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
       {
@@ -144,5 +136,6 @@ module.exports = {
       }
     ]),
     // new CleanWebpackPlugin()  //清理原来的打包文件
+    new OptimizeCssAssetsPlugin()  //css压缩
   ]
 }
