@@ -9,11 +9,12 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         host: 'localhost',   // '0.0.0.0'
-        port: 8080,
+        port: 8081,
         autoOpenBrowser: false,
         proxyTable: {},
         devtool: 'cheap-module-eval-source-map',
-        errorOverlay: true
+        errorOverlay: true,
+        cssSourceMap: true
     },
     build: {
         assetsSubDirectory: 'static',

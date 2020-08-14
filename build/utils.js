@@ -16,8 +16,8 @@ const cssLoaders = ({ sourceMap, usePostCSS, extract }) => {
     }
 
     const generateLoaders = loader => {
-        const loaders = usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
-        // const loaders = usePostCSS ? ['css-loader', 'postcss-loader'] : ['css-loader']
+        // const loaders = usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+        const loaders = usePostCSS ? ['css-loader', 'postcss-loader'] : ['css-loader']
 
         if (loader !== 'css') {
             loaders.push(`${loader}-loader`)
@@ -33,6 +33,8 @@ const cssLoaders = ({ sourceMap, usePostCSS, extract }) => {
         generateLoaders('stylus')
     ]
 }
+
+// console.log(cssLoaders({ sourceMap: undefined, extract: true, usePostCSS: false }))
 
 module.exports = {
     cssLoaders

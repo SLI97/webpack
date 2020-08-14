@@ -10,7 +10,7 @@
 export default {
   data() {
     return {
-      msg: "this is my webpack home!",
+      msg: "this is my webpack home!11",
     };
   },
   created() {

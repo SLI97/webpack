@@ -12,7 +12,7 @@ const utils = require('./utils')
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
-    rules: utils.cssLoaders({ sourceMap: config.dev.cssSourceMap, extract: true, usePostCSS: true })
+    rules: utils.cssLoaders({ sourceMap: config.dev.cssSourceMap, extract: false, usePostCSS: true })
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
@@ -20,7 +20,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     publicPath: config.dev.publicPath,
     host: config.dev.host,
     port: config.dev.port,
-    hot: true,
+    hot: true,   //true的话热更新的时候不会刷新
     inline: true,  // 文件修改后实时刷新
     open: config.dev.autoOpenBrowser,
     stats: 'errors-only',   //不在Terminal输出没用的信息
@@ -31,14 +31,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // if you want dev by ip, please set host: '0.0.0.0' host: 'localhost
     clientLogLevel: 'warning',   //none,error,warning或info
     overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
+        ? {warnings: false, errors: true}
+        : false,
   },
   plugins: [
     new VueLoaderPlugin(),  //Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的.
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
-    new webpack.NoEmitOnErrorsPlugin(),
+    // new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
+    // new webpack.NoEmitOnErrorsPlugin(),
     // copy custom static assets
     new CopyWebpackPlugin([
       {
