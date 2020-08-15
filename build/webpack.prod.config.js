@@ -12,47 +12,44 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const merge = require('webpack-merge')
 const path = require("path")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const utils = require('./utils')
 
 spinner.start()
 
 const prodWebpackConfig = merge(baseWebpackConfig, {
     mode: 'production',
-    devtool: config.build.productionSourceMap ? config.build.devtool : false,
+    entry:{
+        app: path.resolve(__dirname, '../src/main.js'),
+        vendor: ["vue",'vue-router']
+    },
     output: {
         path: config.build.assetsRoot,
-        filename: path.join('static', 'js/[name].[chunkhash].js'),
-        chunkFilename: path.join('static', 'js/[id].[chunkhash].js')
+        filename: path.join('static', 'js/[name].[chunkhash].js'),  //直接被入口文件引用的文件名
+        chunkFilename: path.join('static', 'js/[name].[chunkhash].js')  //异步加载的文件名，如router里的组件
     },
+    devtool: config.build.productionSourceMap ? config.build.devtool : false,
     module: {
-        rules: utils.cssLoaders({ sourceMap: config.dev.cssSourceMap, extract: true, usePostCSS: true })
+        rules: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true, usePostCSS: true })
     },
     plugins: [
         new VueLoaderPlugin(),  //Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的.
-        new UglifyJsPlugin({
-            uglifyOptions: {
-                compress: {
-                    warnings: false
-                }
-            },
-            sourceMap: config.build.productionSourceMap,
-            parallel: true
-        }),
-        new MiniCssExtractPlugin({
+        new MiniCssExtractPlugin({   //提取css作为单独文件
             filename: path.join('static', 'css/[name].[contenthash].css'),
-            chunkFilename: path.join('static', 'css/[id].[contenthash].css')
-        }),
-        // Compress extracted CSS. We are using this plugin so that possible
-        // duplicated CSS from different components can be deduped.
-        new OptimizeCssAssetsPlugin({
-            cssProcessorOptions: config.build.productionSourceMap
-                ? { safe: true, map: { inline: false } }
-                : { safe: true }
+            chunkFilename: path.join('static', 'css/[name].[contenthash].css')
         }),
         // keep module.id stable when vendor modules does not change
+        /*
+             使用文件路径的 hash 作为 moduleId。
+             虽然我们使用 [chunkhash] 作为 chunk 的输出名，但仍然不够。
+             因为 chunk 内部的每个 module 都有一个 id，webpack 默认使用递增的数字作为 moduleId。
+             如果引入了一个新文件或删掉一个文件，可能会导致其他文件的 moduleId 也发生改变，
+             那么受影响的 module 所在的 chunk 的 [chunkhash] 就会发生改变，导致缓存失效。
+             因此使用文件路径的 hash 作为 moduleId 来避免这个问题。
+         */
         new webpack.HashedModuleIdsPlugin(),
         // enable scope hoisting
-        new webpack.optimize.ModuleConcatenationPlugin(),
+        // new webpack.optimize.ModuleConcatenationPlugin(),
 
         // copy custom static assets
         new CopyWebpackPlugin([
@@ -62,8 +59,54 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
                 ignore: ['.*']
             }
         ]),
-        new CleanWebpackPlugin()
-    ]
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            //  是否在默认浏览器中自动打开报告
+            openAnalyzer: false,
+            //  将在“服务器”模式下使用的端口启动HTTP服务器。
+            analyzerPort: 9528,
+            reportFilename: 'static/report.html',
+        }),
+        new CleanWebpackPlugin()  // 删除 dist 文件夹
+    ],
+    // webpack4.x 新增配置项
+    optimization: {
+        splitChunks: {
+            chunks: 'initial', // 只对入口文件处理    表示显示块的范围，有三个可选值：initial(初始块)、async(按需加载块)、all(全部块)，默认为all;
+            cacheGroups:{
+                vendors: {
+                    test: /node_modules\//,
+                    name: 'vendor',
+                    priority: 10,
+                    enforce: true,
+                },
+            }
+        },
+        /*
+         上面提到 chunkFilename 指定了 chunk 打包输出的名字，那么文件名存在哪里了呢？
+         它就存在引用它的文件中。这意味着一个 chunk 文件名发生改变，会导致引用这个 chunk 文件也发生改变。
+
+         runtimeChunk 设置为 true, webpack 就会把 chunk 文件名全部存到一个单独的 chunk 中，
+         这样更新一个文件只会影响到它所在的 chunk 和 runtimeChunk，避免了引用这个 chunk 的文件也发生改变。
+         */
+        runtimeChunk: {
+            name: 'manifest'
+        },
+        minimizer: [ // 用于配置 minimizers 和选项
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: config.build.productionSourceMap, // set to true if you want JS source maps
+            }),
+            // Compress extracted CSS. We are using this plugin so that possible
+            // duplicated CSS from different components can be deduped.
+            new OptimizeCssAssetsPlugin({  //压缩提取出来的css空格，并且把重复的css样式去掉
+                cssProcessorOptions: config.build.productionSourceMap
+                    ? { safe: true, map: { inline: false } }
+                    : { safe: true }
+            }),
+        ]
+    },
 })
 
 // module.exports = prodWebpackConfig

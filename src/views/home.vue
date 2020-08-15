@@ -17,6 +17,15 @@ export default {
     // console.lo(123)
     // fetch('/api').then(res=>res.json()).then(res=>console.log(res))
   },
+    methods:{
+      haha(){
+          const qwe = ()=>{
+              console.log(999)
+          }
+
+          qwe()
+      }
+    }
 };
 </script>
 

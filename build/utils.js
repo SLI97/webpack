@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const cssLoaders = ({ sourceMap, usePostCSS, extract }) => {
+const cssLoaders = ({sourceMap, usePostCSS, extract}) => {
     const cssLoader = {
         loader: 'css-loader',
         options: {
@@ -11,31 +11,56 @@ const cssLoaders = ({ sourceMap, usePostCSS, extract }) => {
     const postcssLoader = {
         loader: 'postcss-loader',
         options: {
-            sourceMap: sourceMap
+            sourceMap: sourceMap,
+            config: {
+                path: 'postcss.config.js'
+            }
         }
     }
 
     const generateLoaders = loader => {
-        // const loaders = usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
-        const loaders = usePostCSS ? ['css-loader', 'postcss-loader'] : ['css-loader']
+        let loaders = usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+        loaders = extract ? [MiniCssExtractPlugin.loader].concat(loaders) : ['style-loader'].concat(loaders)
 
-        if (loader !== 'css') {
-            loaders.push(`${loader}-loader`)
+        if (loader) {
+            loaders.push({
+                loader: loader + '-loader',
+                options: Object.assign({}, {
+                    sourceMap: sourceMap
+                })
+            })
         }
 
-        return { test: new RegExp('\\.' + loader + '$'), use: [extract ? MiniCssExtractPlugin.loader : 'style-loader'].concat(loaders) }
+        return loaders
     }
 
-    return [
-        generateLoaders('css'),
-        generateLoaders('less'),
-        generateLoaders('sass'),
-        generateLoaders('stylus')
-    ]
+    return {
+        css: generateLoaders(),
+        postcss: generateLoaders(),
+        less: generateLoaders('less'),
+        scss: generateLoaders('sass'),
+        stylus: generateLoaders('stylus'),
+        styl: generateLoaders('stylus')
+    }
 }
 
-// console.log(cssLoaders({ sourceMap: undefined, extract: true, usePostCSS: false }))
+
+// Generate loaders for standalone style files (outside of .vue)
+styleLoaders = (options) => {
+    const output = []
+    const loaders = cssLoaders(options)
+
+    for (const extension in loaders) {
+        const loader = loaders[extension]
+        output.push({
+            test: new RegExp('\\.' + extension + '$'),
+            use: loader
+        })
+    }
+
+    return output
+}
 
 module.exports = {
-    cssLoaders
+    styleLoaders
 }
