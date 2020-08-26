@@ -85,7 +85,7 @@ module.exports = {
             inject: true,
             minify: {
                 collapseInlineTagWhitespace: true,   //折叠空白区域
-                removeRedundantAttributes:true, // 删除多余的属性
+                removeRedundantAttributes: true, // 删除多余的属性
                 removeAttributeQuotes: true, // 移除属性的引号
                 removeComments: true,   //删除注释
                 hash: true,    //是否需要对src引的文件后面加上Hash，使用时需要区分开发环境和生产环境
@@ -96,5 +96,14 @@ module.exports = {
                 BASE_TITLE: '我是TITLE',
             },
         }),
+        // new webpack.IgnorePlugin(/\.\/locale/,/moment/),
+        // 有些包自带语言包，有时候不需要把所有的语言包跟着打包比如 moment，那么我们就需要把这个包特殊对待
+        // new webpack.ProvidePlugin({ //提供全局变量
+        //     "$": "jquery"
+        // })
+        //排除之外  加入 在cdn引入了这个包 就不会打包这个包
+        // externals: { 如果在html引入cdn路径并且在页面也 import $ from jquery 这就坏了, 即使引入cdn也会打包
+        //     'jquery': '$
+        // }
     ],
 }

@@ -1,7 +1,7 @@
 const config = require('../config')
 const baseWebpackConfig = require('./webpack.base.config')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//压缩css插件
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); //压缩css插件
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const chalk = require('chalk')
 const ora = require('ora')
@@ -19,22 +19,22 @@ spinner.start()
 
 const prodWebpackConfig = merge(baseWebpackConfig, {
     mode: 'production',
-    entry:{
+    entry: {
         app: path.resolve(__dirname, '../src/main.js'),
-        vendor: ["vue",'vue-router']
+        // vendor: ["vue",'vue-router']
     },
     output: {
         path: config.build.assetsRoot,
-        filename: path.join('static', 'js/[name].[chunkhash].js'),  //直接被入口文件引用的文件名
-        chunkFilename: path.join('static', 'js/[name].[chunkhash].js')  //异步加载的文件名，如router里的组件
+        filename: path.join('static', 'js/[name].[chunkhash].js'), //直接被入口文件引用的文件名
+        chunkFilename: path.join('static', 'js/[name].[chunkhash].js') //异步加载的文件名，如router里的组件
     },
     devtool: config.build.productionSourceMap ? config.build.devtool : false,
     module: {
         rules: utils.styleLoaders({ sourceMap: config.build.productionSourceMap, extract: true, usePostCSS: true })
     },
     plugins: [
-        new VueLoaderPlugin(),  //Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的.
-        new MiniCssExtractPlugin({   //提取css作为单独文件
+        new VueLoaderPlugin(), //Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的.
+        new MiniCssExtractPlugin({ //提取css作为单独文件
             filename: path.join('static', 'css/[name].[contenthash].css'),
             chunkFilename: path.join('static', 'css/[name].[contenthash].css')
         }),
@@ -52,13 +52,11 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
         // new webpack.optimize.ModuleConcatenationPlugin(),
 
         // copy custom static assets
-        new CopyWebpackPlugin([
-            {
-                from: path.resolve(__dirname, '../static'),
-                to: config.build.assetsSubDirectory,
-                ignore: ['.*']
-            }
-        ]),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname, '../static'),
+            to: config.build.assetsSubDirectory,
+            ignore: ['.*']
+        }]),
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             //  是否在默认浏览器中自动打开报告
@@ -67,13 +65,13 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
             analyzerPort: 9528,
             reportFilename: 'static/report.html',
         }),
-        new CleanWebpackPlugin()  // 删除 dist 文件夹
+        new CleanWebpackPlugin() // 删除 dist 文件夹
     ],
     // webpack4.x 新增配置项
     optimization: {
         splitChunks: {
             chunks: 'initial', // 只对入口文件处理    表示显示块的范围，有三个可选值：initial(初始块)、async(按需加载块)、all(全部块)，默认为all;
-            cacheGroups:{
+            cacheGroups: {
                 vendors: {
                     test: /node_modules\//,
                     name: 'vendor',
@@ -100,10 +98,10 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
             }),
             // Compress extracted CSS. We are using this plugin so that possible
             // duplicated CSS from different components can be deduped.
-            new OptimizeCssAssetsPlugin({  //压缩提取出来的css空格，并且把重复的css样式去掉
-                cssProcessorOptions: config.build.productionSourceMap
-                    ? { safe: true, map: { inline: false } }
-                    : { safe: true }
+            new OptimizeCssAssetsPlugin({ //压缩提取出来的css空格，并且把重复的css样式去掉
+                cssProcessorOptions: config.build.productionSourceMap ?
+                    { safe: true, map: { inline: false } } :
+                    { safe: true }
             }),
         ]
     },

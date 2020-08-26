@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const cssLoaders = ({sourceMap, usePostCSS, extract}) => {
+const cssLoaders = ({ sourceMap, usePostCSS, extract }) => {
     const cssLoader = {
         loader: 'css-loader',
         options: {
@@ -46,7 +46,7 @@ const cssLoaders = ({sourceMap, usePostCSS, extract}) => {
 
 
 // Generate loaders for standalone style files (outside of .vue)
-styleLoaders = (options) => {
+const styleLoaders = (options) => {
     const output = []
     const loaders = cssLoaders(options)
 

@@ -11,7 +11,9 @@ module.exports = {
         host: 'localhost',   // '0.0.0.0'
         port: 8081,
         autoOpenBrowser: false,
-        proxyTable: {},
+        proxyTable: {
+            // '/api': 'http://127.0.0.1:3000'
+        },
         devtool: 'cheap-module-eval-source-map',
         errorOverlay: true,
         cssSourceMap: true
