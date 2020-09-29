@@ -7,7 +7,6 @@ const chalk = require('chalk')
 const ora = require('ora')
 const spinner = ora('building for production...')
 const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const merge = require('webpack-merge')
 const path = require("path")
@@ -16,7 +15,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const utils = require('./utils')
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
-// console.log(PrerenderSPAPlugin)
 
 spinner.start()
 
@@ -36,11 +34,10 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
 		rules: utils.styleLoaders({sourceMap: config.build.productionSourceMap, extract: true, usePostCSS: true})
 	},
 	plugins: [
-		new VueLoaderPlugin(), //Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的.
-		new MiniCssExtractPlugin({ //提取css作为单独文件
-			filename: path.join('static', 'css/[name].[contenthash].css'),
-			chunkFilename: path.join('static', 'css/[name].[contenthash].css')
-		}),
+		// new MiniCssExtractPlugin({ //提取css作为单独文件
+		// 	filename: path.join('static', 'css/[name].[contenthash].css'),
+		// 	chunkFilename: path.join('static', 'css/[name].[contenthash].css')
+		// }),
 		// keep module.id stable when vendor modules does not change
 		/*
 				 使用文件路径的 hash 作为 moduleId。

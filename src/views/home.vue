@@ -2,6 +2,7 @@
 	<div>
 		{{msg}}
 		<router-link to="/test">跳转</router-link>
+		<router-link to="/skeleton">跳转</router-link>
 		<!--<span class="container">home!!123</span>-->
 		<!--<img src="../assets/images/aaa.png" class="img"/>-->
 		<!--<haha :message="'我是信息!'">-->
