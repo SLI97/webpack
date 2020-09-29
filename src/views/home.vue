@@ -1,22 +1,31 @@
 <template>
 	<div>
 		{{msg}}
-		<span class="container">home!!123</span>
-		<img src="../assets/images/aaa.png" class="img"/>
-		<haha :message="'我是信息!'">
-			<div class="slot">{{'ZXC123' | devide}}</div>
-		</haha>
-		<div>{{123123 | qqq}}</div>
-		<div @click="qwe">按我发送信息</div>
-		<div v-focus v-if="showOrNot">我是自定义指令</div>
-		<div @click="count++">{{count}}</div>
-		<div @click="showOrNot = true">绑定</div>
-		<div @click="showOrNot = false">解绑</div>
+		<router-link to="/test">跳转</router-link>
+		<!--<span class="container">home!!123</span>-->
+		<!--<img src="../assets/images/aaa.png" class="img"/>-->
+		<!--<haha :message="'我是信息!'">-->
+			<!--<div class="slot">{{'ZXC123' | devide}}</div>-->
+		<!--</haha>-->
+		<!--<div>{{123123 | qqq}}</div>-->
+		<!--<div @click="qwe">按我发送信息</div>-->
+		<!--<div v-focus v-if="showOrNot">我是自定义指令</div>-->
+		<!--<div @click="count++">{{count}}</div>-->
+		<!--<div @click="showOrNot = true">绑定</div>-->
+		<!--<div @click="showOrNot = false">解绑</div>-->
 	</div>
 </template>
 
 <script>
 	export default {
+		// 这些代码会转成网页的meta标签里的内容
+		metaInfo: {
+			title: '标题',
+			meta: [
+				{name: 'keywords', content: '关键字'},
+				{name: 'description', content: '网页描述'}
+			]
+		},
 		data() {
 			return {
 				msg: "this is my webpack home!1!!1",
@@ -58,33 +67,33 @@
 			}
 		},
 		created() {
-			if ("WebSocket" in window) {
-				// alert("您的浏览器支持 WebSocket!");
-
-				// 打开一个 web socket
-				var ws = this.mySocket = new WebSocket("ws://localhost:3000");
-
-				ws.onopen = function () {
-					// Web Socket 已连接上，使用 send() 方法发送数据
-					ws.send("发送数据");
-					// alert("数据发送中...");
-				};
-
-				ws.onmessage = function (evt) {
-					var received_msg = evt.data;
-					// alert("数据已接收...");
-				};
-
-				ws.onclose = function () {
-					// 关闭 websocket
-					// alert("连接已关闭...");
-				};
-			}
-
-			else {
-				// 浏览器不支持 WebSocket
-				// alert("您的浏览器不支持 WebSocket!");
-			}
+			// if ("WebSocket" in window) {
+			// 	// alert("您的浏览器支持 WebSocket!");
+			//
+			// 	// 打开一个 web socket
+			// 	var ws = this.mySocket = new WebSocket("ws://localhost:3000");
+			//
+			// 	ws.onopen = function () {
+			// 		// Web Socket 已连接上，使用 send() 方法发送数据
+			// 		ws.send("发送数据");
+			// 		// alert("数据发送中...");
+			// 	};
+			//
+			// 	ws.onmessage = function (evt) {
+			// 		var received_msg = evt.data;
+			// 		// alert("数据已接收...");
+			// 	};
+			//
+			// 	ws.onclose = function () {
+			// 		// 关闭 websocket
+			// 		// alert("连接已关闭...");
+			// 	};
+			// }
+			//
+			// else {
+			// 	// 浏览器不支持 WebSocket
+			// 	// alert("您的浏览器不支持 WebSocket!");
+			// }
 		},
 		methods: {
 			haha() {

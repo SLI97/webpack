@@ -4,18 +4,24 @@ import App from './app'
 import router from './router'
 import '@/assets/css/base.css'
 
+import MetaInfo from 'vue-meta-info'
+Vue.use(MetaInfo)
+
 Vue.component("haha", {
 	props: ["message"],
 	template: "<div ><h1>组件定义之全局组件</h1><h4>{{message}}<slot></slot></h4></div>"
 })
 
 new Vue({
-    el: '#app',
-    router,
-    render: h => h(App)
+	el: '#app',
+	router,
+	render: h => h(App),
+	mounted() {
+		document.dispatchEvent(new Event('render-event'))
+	}
 })
 
-Vue.filter("devide",(value)=>{
+Vue.filter("devide", (value) => {
 	return value.split('').reverse().join('')
 })
 
