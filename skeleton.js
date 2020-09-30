@@ -10,20 +10,12 @@ function createRenderer(bundle, options) {
 	}))
 }
 
-const handleError = err => {
-	// console.error(`error during render : ${req.url}`)
-	console.error(err.stack)
-}
-
 const bundle = require('./dist/skeleton.json')
-const templatePath = resolve('./public/index.html')
-const template = fs.readFileSync(templatePath, 'utf-8')
+const template = fs.readFileSync(resolve('./public/template.html'), 'utf-8')
 // console.log(template)
 const renderer = createRenderer(bundle, {
 	template
 })
-
-// console.log(renderer)
 
 /**
  * 说明：
@@ -36,16 +28,15 @@ const renderer = createRenderer(bundle, {
  * 文档： https://cli.vuejs.org/zh/guide/html-and-static-assets.html#%E6%8F%92%E5%80%BC
  */
 const context = {
-	title: '',  // default title
-	meta: `<meta name="theme-color" content="#4285f4">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="<%= BASE_URL %>css/reset.css">
-`
+	title: 'vue skeleton',  // default title
+	meta:`<meta haha="123" />`
 }
 
 renderer.renderToString(context, (err, html) => {
 	if(err) {
-		return handleError(err)
+		console.error(err.stack)
+		return
 	}
-	fs.writeFileSync(resolve(__dirname, './index.html'), html, 'utf-8')
+	console.log(html)
+	fs.writeFileSync(resolve(__dirname, './public/index.html'), html, 'utf-8')
 })
